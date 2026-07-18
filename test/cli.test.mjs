@@ -69,3 +69,26 @@ test("init creates .zharwing/config.json and is non-destructive", () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("stack subcommand with no installed CLI exits 1 with install pointer", () => {
+  const result = runCli(["memory", "sessions"], {
+    env: { ...process.env, PATH: "", Path: "" },
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /no memory CLI found on PATH/);
+  assert.match(result.stderr, /github\.com\/zharwing\/memory/);
+});
+
+test("web subcommand explains the service has no CLI", () => {
+  const result = runCli(["web"]);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /no CLI binary to delegate to/);
+  assert.match(result.stderr, /github\.com\/zharwing\/web/);
+});
+
+test("help lists the stack commands", () => {
+  const result = runCli(["help"]);
+  assert.match(result.stdout, /run \.\.\./);
+  assert.match(result.stdout, /memory \.\.\./);
+  assert.match(result.stdout, /context \.\.\./);
+});

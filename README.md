@@ -32,16 +32,27 @@ Scoped packages are published as their subsystems reach release quality.
 
 ## This package
 
-The `zharwing` package is the umbrella CLI seed. Today it ships:
+The `zharwing` package is the umbrella CLI. Today it ships:
 
 ```text
 zharwing --version   print the version
-zharwing doctor      check node, npm, git, workspace, config dir, and the
-                     optional local model endpoint (ZHARWING_MODEL_ENDPOINT)
+zharwing doctor      check node, npm, git, workspace, config dir, the optional
+                     local model endpoint (ZHARWING_MODEL_ENDPOINT), and which
+                     stack components are installed
 zharwing init        create .zharwing/config.json in the current directory
                      (non-destructive)
 zharwing help        show usage
+
+zharwing run ...     delegate to the Zharwing Harness CLI when installed
+zharwing memory ...  delegate to the Zharwing Memory CLI when installed
+zharwing context ... delegate to the Zharwing Context CLI when installed
+zharwing web         where to find the web research service
 ```
+
+Stack subcommands look for the canonical component binary first
+(`zharwing-harness`, `zharwing-memory`, `zharwing-context`) and fall back to
+the pre-rename aliases (`agent`, `aimem`, `ctx`). A missing component is a
+clear message with an install pointer, never a crash.
 
 ### Install and run
 

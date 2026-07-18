@@ -1,7 +1,7 @@
 {
   "name": "zharwing",
-  "version": "0.1.0",
-  "description": "Zharwing — a local-first stack for verified AI agents. Umbrella CLI seed: environment doctor and project init for the Zharwing toolchain.",
+  "version": "0.2.0",
+  "description": "Zharwing \u2014 a local-first stack for verified AI agents. Umbrella CLI seed: environment doctor and project init for the Zharwing toolchain.",
   "keywords": [
     "zharwing",
     "agents",

@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import { accessSync, constants, existsSync, mkdirSync, rmdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { COMPONENTS, findBinary } from "./delegate.mjs";
 
 const MIN_NODE_MAJOR = 20;
 
@@ -14,10 +15,10 @@ function checkNode() {
   };
 }
 
-function checkCommand(name, args = ["--version"]) {
-  const result = spawnSync(name, args, {
+function checkCommand(name, args = "--version") {
+  const result = spawnSync(`${name} ${args}`, {
     encoding: "utf8",
-    shell: process.platform === "win32",
+    shell: true,
     timeout: 10_000,
   });
   const ok = result.status === 0;
@@ -56,6 +57,21 @@ function checkConfigDir() {
   }
 }
 
+// Stack components are optional installs: their absence is informational,
+// never a doctor failure.
+function checkComponents() {
+  return Object.entries(COMPONENTS)
+    .filter(([, component]) => component.bins.length > 0)
+    .map(([name, component]) => {
+      const bin = findBinary(component.bins);
+      return {
+        name: `component: ${name}`,
+        ok: true,
+        detail: bin ? `${bin} on PATH` : `not installed (optional; ${component.install})`,
+      };
+    });
+}
+
 async function checkModelEndpoint() {
   const endpoint = process.env.ZHARWING_MODEL_ENDPOINT;
   if (!endpoint) {
@@ -92,6 +108,7 @@ export async function runDoctor(args, io) {
     checkWorkspace(process.cwd()),
     checkConfigDir(),
     await checkModelEndpoint(),
+    ...checkComponents(),
   ];
 
   const failed = checks.filter((check) => !check.ok);

@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { runDoctor } from "./doctor.mjs";
 import { runInit } from "./init.mjs";
+import { delegate, isComponent } from "./delegate.mjs";
 
 const require = createRequire(import.meta.url);
 const pkg = require("../package.json");
@@ -12,9 +13,15 @@ Usage:
   zharwing <command> [options]
 
 Commands:
-  doctor       Check this machine for Zharwing prerequisites
+  doctor       Check this machine for Zharwing prerequisites and components
   init         Create .zharwing/config.json in the current directory
   help         Show this help
+
+Stack commands (delegate to the component CLI when installed):
+  run ...      Zharwing Harness - deterministic supervisor
+  memory ...   Zharwing Memory - durable project memory and sessions
+  context ...  Zharwing Context - budgeted, cited context packs
+  web          Zharwing Web - bounded web research service (info)
 
 Options:
   --version    Print the version and exit
@@ -43,6 +50,10 @@ export async function run(argv, io = { out: console.log, err: console.error }) {
 
   if (command === "init") {
     return runInit(rest, io);
+  }
+
+  if (isComponent(command)) {
+    return delegate(command, rest, io);
   }
 
   io.err(`zharwing: unknown command "${command}" (try "zharwing help")`);
