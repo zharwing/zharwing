@@ -1,0 +1,38 @@
+{
+  "name": "zharwing",
+  "version": "0.1.0",
+  "description": "Zharwing — a local-first stack for verified AI agents. Umbrella CLI seed: environment doctor and project init for the Zharwing toolchain.",
+  "keywords": [
+    "zharwing",
+    "agents",
+    "local-first",
+    "ai",
+    "cli",
+    "harness"
+  ],
+  "license": "MIT",
+  "author": "Sviatoslav Barbutsa",
+  "type": "module",
+  "bin": {
+    "zharwing": "bin/zharwing.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zharwing/zharwing.git"
+  },
+  "homepage": "https://github.com/zharwing/zharwing#readme",
+  "bugs": "https://github.com/zharwing/zharwing/issues",
+  "scripts": {
+    "test": "node --test"
+  }
+}
